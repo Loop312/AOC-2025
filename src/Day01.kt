@@ -1,4 +1,8 @@
+import kotlin.math.abs
+
 fun main() {
+    val testInput = readInput("Day01_test")
+    println(testInput)
     fun part1(input: List<String>): Int {
         val indices = 100
         var currentNumber = 50
@@ -19,27 +23,44 @@ fun main() {
         return zeroCounter
     }
     //TEST
-//    val testInput1 = readInput("Day01_test")
-//    println(testInput1)
 //    val testAnswer1 = part1(testInput1)
 //    println(testAnswer1)
     //FINAL
     //Read the input from the `src/Day01.txt` file.
-    val input1 = readInput("Day01")
-    val answer1 = part1(input1)
-    println(answer1)
+//    val input1 = readInput("Day01")
+//    val answer1 = part1(input1)
+//    println(answer1)
 
     fun part2(input: List<String>): Int {
-        return input.size
+        val indices = 100
+        var currentNumber = 50
+        var zeroCounter = 0
+        for (line in input) {
+            val direction = line[0]
+            val spinAmount = line.substring(1).toInt()
+            println("currentNumber: $currentNumber")
+            println("nextInstruction: $line")
+            val previousNumber = currentNumber
+            when (direction) {
+                'L' -> currentNumber -= spinAmount
+                'R' -> currentNumber += spinAmount
+            }
+            zeroCounter += abs(currentNumber / indices)
+            if (currentNumber == 0 || previousNumber > 0 && currentNumber < 0 || previousNumber < 0 && currentNumber > 0) {
+                zeroCounter += 1
+            }
+            println("zeroCounter: $zeroCounter")
+            currentNumber %= indices
+        }
+        return zeroCounter
     }
-
-//    val testInput2 = readInput("Day01_test2")
-//    println(testInput2)
-//    val testAnswer2 = part2(testInput2)
+    //TEST
+//    val testAnswer2 = part2(testInput)
 //    println(testAnswer2)
-//    val input2 = readInput("Day01")
-//    val answer2 = part1(input2)
-//    println(answer2)
+    //FINAL
+    val input2 = readInput("Day01")
+    val answer2 = part2(input2)
+    println(answer2)
 }
 
 
@@ -77,4 +98,18 @@ You could follow the instructions,
 but your recent required official North Pole secret entrance security training seminar
 taught you that the safe is actually a decoy.
 The actual password is the number of times the dial is left pointing at 0 after any rotation in the sequence.
+
+--- Part Two ---
+You're sure that's the right password, but the door won't open.
+You knock, but nobody answers. You build a snowman while you think.
+
+As you're rolling the snowballs for your snowman,
+you find another security document that must have fallen into the snow:
+
+"Due to newer security protocols,
+please use password method 0x434C49434B until further notice."
+
+You remember from the training seminar that "method 0x434C49434B" means
+you're actually supposed to count the number of times any click causes the dial to point at 0,
+regardless of whether it happens during a rotation or at the end of one.
 */
