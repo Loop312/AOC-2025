@@ -1,6 +1,6 @@
 fun main() {
-    //val testInput = readInput("Day02_test")[0]
-    //println(testInput)
+//    val testInput = readInput("Day02_test")[0]
+//    println(testInput)
     fun part1(input: String): Long {
         //parse string
         val numList = mutableListOf<Long>()
@@ -25,20 +25,36 @@ fun main() {
 //    val testAnswer1 = part1(testInput)
 //    println(testAnswer1)
     //FINAL
-    val input1 = readInput("Day02")[0]
-    val answer1 = part1(input1)
-    println(answer1)
+//    val input1 = readInput("Day02")[0]
+//    val answer1 = part1(input1)
+//    println(answer1)
 
-    fun part2(input: List<String>): Int {
-        return input.size
+    fun part2(input: String): Long {
+        //parse string
+        val numList = mutableListOf<Long>()
+        val list = input.split(',')
+        list.forEach { string ->
+            val rangeSeparator = string.split('-')
+            val range = rangeSeparator[0].toLong()..rangeSeparator[1].toLong()
+            //adds each number in the range
+            numList += range
+        }
+        //println(numList)
+        var sum = 0L
+        numList.forEach { num ->
+            if (multiRepetition(num)) {
+                sum += num
+            }
+        }
+        return sum
     }
     //TEST
 //    val testAnswer2 = part2(testInput)
 //    println(testAnswer2)
     //FINAL
-//    val input2 = readInput("Day01")
-//    val answer2 = part2(input2)
-//    println(answer2)
+    val input2 = readInput("Day02")[0]
+    val answer2 = part2(input2)
+    println(answer2)
 }
 
 private fun doubleRepetition(num: Long): Boolean {
@@ -53,6 +69,26 @@ private fun doubleRepetition(num: Long): Boolean {
     }
 }
 
+private fun multiRepetition(num: Long): Boolean {
+    val numString = num.toString()
+    val mid = numString.length / 2
+    for (i in 1..mid) {
+        //possible repeat
+        if (numString.length % i == 0) {
+            val repeatable = numString.take(i)
+            val repeatAmount = (numString.length/i)
+            val repeated = repeatable.repeat(repeatAmount)
+//            println("REPEATED: $repeated")
+//            println("REPEATABLE: $repeatable")
+//            println("NUMSTRING: $numString")
+            if (repeated == numString) {
+                println("SUCCESS: $num")
+                return true
+            }
+        }
+    }
+    return false
+}
 
 /*
 --- Day 2: Gift Shop ---
