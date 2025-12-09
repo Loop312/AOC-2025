@@ -15,20 +15,26 @@ fun main() {
 //    println(testAnswer1)
     //FINAL
     //Read the input from the `src/Day01.txt` file.
-    val input1 = readInput("Day03")
-    val answer1 = part1(input1)
-    println(answer1)
+//    val input1 = readInput("Day03")
+//    val answer1 = part1(input1)
+//    println(answer1)
 
-    fun part2(input: List<String>): Int {
-        return 0
+    fun part2(input: List<String>): Long {
+        var sum = 0L
+        for (line in input) {
+            val largestCombo = getLargest(line, 12)
+            println(largestCombo)
+            sum += largestCombo.toLong()
+        }
+        return sum
     }
     //TEST
 //    val testAnswer2 = part2(testInput)
 //    println(testAnswer2)
     //FINAL
-//    val input2 = readInput("Day03")
-//    val answer2 = part2(input2)
-//    println(answer2)
+    val input2 = readInput("Day03")
+    val answer2 = part2(input2)
+    println(answer2)
 }
 
 private fun getLargest(line: String, digits: Int): String {
