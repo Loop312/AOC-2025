@@ -26,21 +26,20 @@ fun main() {
 //    println(testAnswer1)
     //FINAL
     //Read the input from the `src/Day01.txt` file.
-    val input1 = readInput("Day04")
-    val answer1 = part1(input1)
-    println(answer1)
+//    val input1 = readInput("Day04")
+//    val answer1 = part1(input1)
+//    println(answer1)
 
     fun part2(input: List<String>): Int {
-        val count = 0
-        return count
+        return recursiveCheck(input)
     }
     //TEST
 //    val testAnswer2 = part2(testInput)
 //    println(testAnswer2)
     //FINAL
-//    val input2 = readInput("Day03")
-//    val answer2 = part2(input2)
-//    println(answer2)
+    val input2 = readInput("Day04")
+    val answer2 = part2(input2)
+    println(answer2)
 }
 
 private fun boxCheck(index: Int, topRow: String?, midRow: String, bottomRow: String?): Boolean {
@@ -66,4 +65,31 @@ private fun boxCheck(index: Int, topRow: String?, midRow: String, bottomRow: Str
     }
     val total = top + left + right + bottom
     return total < 4
+}
+
+private fun recursiveCheck(input: List<String>): Int {
+    var count = 0
+    val tempInput = input.toMutableList()
+    //for the box check
+    for (strIndex in 0..input.lastIndex) {
+        for (charIndex in 0..input[strIndex].lastIndex) {
+            if (input[strIndex][charIndex] == '@' &&
+                //can only do box check if not at the top or bottom
+                boxCheck(
+                    charIndex,
+                    input.getOrNull(strIndex - 1),
+                    input[strIndex],
+                    input.getOrNull(strIndex + 1)
+                )) {
+                //need to use charArray due to "No 'set' operator method providing array access."
+                val charArray = tempInput[strIndex].toCharArray()
+                charArray[charIndex] = 'x'
+                tempInput[strIndex] = String(charArray)
+                println("+1 on line $strIndex")
+                count += 1
+            }
+        }
+    }
+    if (count == 0) return 0
+    return count + recursiveCheck(tempInput)
 }
