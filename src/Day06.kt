@@ -1,6 +1,6 @@
 fun main() {
-    val testInput = readInput("Day06_test")
-    println(testInput)
+//    val testInput = readInput("Day06_test")
+//    println(testInput)
     fun part1(input: List<String>): Long {
         //parsing
         val list2d = MutableList(input.size){emptyList<String>()}
@@ -42,18 +42,59 @@ fun main() {
 //    println(testAnswer1)
     //FINAL
     //Read the input from the `src/Day01.txt` file.
-    val input1 = readInput("Day06")
-    val answer1 = part1(input1)
-    println(answer1)
+//    val input1 = readInput("Day06")
+//    val answer1 = part1(input1)
+//    println(answer1)
 
     fun part2(input: List<String>): Long {
-        return 0L
+        var total = 0L
+        val mutableInput = input.toMutableList()
+        var tempTotal = 0L
+        val ops = mutableInput.removeLast().toCharArray().filterNot { it == ' ' }.toMutableList()
+//        println(ops)
+        var op = ops.removeLast()
+        while (mutableInput.any {it.isNotEmpty()}) {
+            var numStr = ""
+
+            for (row in 0 until mutableInput.size) {
+//                println("mutableInput[$row]: " + mutableInput[row])
+                for (char in mutableInput[row].reversed()) {
+                    numStr += char
+//                    println("numStr: $numStr")
+                    mutableInput[row] = mutableInput[row].dropLast(1)
+//                    println("mutableInput: $mutableInput")
+                    break
+                }
+            }
+            numStr = numStr.filterNot { it == ' ' }
+//            println("FINAL NUMBER: $numStr")
+//            println("FINAL OPERATION: $op")
+            when (val num = numStr.toLongOrNull()) {
+                null -> {
+                    total += tempTotal
+                    op = ops.removeLast()
+                    tempTotal = when (op) {
+                        '*' -> 1L
+                        '+' -> 0L
+                        else -> -1L
+                    }
+                }
+                else -> when (op) {
+                    '*' -> tempTotal *= num
+                    '+' -> tempTotal += num
+                }
+            }
+            println("tempTotal: $tempTotal")
+            println("TOTAL: $total")
+        }
+        total += tempTotal
+        return total
     }
     //TEST
 //    val testAnswer2 = part2(testInput)
 //    println(testAnswer2)
     //FINAL
-//    val input2 = readInput("Day05")
-//    val answer2 = part2(input2)
-//    println(answer2)
+    val input2 = readInput("Day06")
+    val answer2 = part2(input2)
+    println(answer2)
 }
