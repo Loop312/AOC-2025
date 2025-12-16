@@ -29,20 +29,44 @@ fun main() {
 //    println(testAnswer1)
     //FINAL
     //Read the input from the `src/Day01.txt` file.
-    val input1 = readInput("Day08")
-    val answer1 = part1(input1, 1000)
-    println(answer1)
+//    val input1 = readInput("Day08")
+//    val answer1 = part1(input1, 1000)
+//    println(answer1)
 
     fun part2(input: List<String>): Long {
+        val coords = input.map { it.split(',').map { it.toInt() } }
+//        println(coords)
+        val connections: MutableList<Triple<Int, Int, Long>> = mutableListOf()
+
+        for (i in 0 until coords.size) {
+            for (j in i + 1 until coords.size) {
+                connections += Triple(i, j, getDistSq(coords[i], coords[j]))
+            }
+        }
+        //sort by distance
+        connections.sortBy { it.third }
+        //println(connections)
+
+        val uf = UnionFind(coords.size)
+        //number of unions
+        for (connection in connections) {
+            val (a, b, _) = connection
+            uf.union(a, b)
+            if (uf.count <= 1) {
+                val x1 = coords[a][0].toLong()
+                val x2 = coords[b][0].toLong()
+                return x1 * x2
+            }
+        }
         return 0
     }
     //TEST
 //    val testAnswer2 = part2(testInput)
 //    println(testAnswer2)
     //FINAL
-//    val input2 = readInput("Day08")
-//    val answer2 = part2(input2)
-//    println(answer2)
+    val input2 = readInput("Day08")
+    val answer2 = part2(input2)
+    println(answer2)
 }
 
 private fun getDistSq(coord1: List<Int>, coord2: List<Int>): Long {
@@ -55,6 +79,7 @@ private fun getDistSq(coord1: List<Int>, coord2: List<Int>): Long {
 private class UnionFind(size: Int){
     val parent = IntArray(size) { it }
     val groupSizes = IntArray(size) { 1 }
+    var count = size
 
     fun find(i: Int): Int {
         if (parent[i] == i) return i
@@ -69,6 +94,7 @@ private class UnionFind(size: Int){
             parent[rootI] = rootJ
             groupSizes[rootJ] += groupSizes[rootI]
             groupSizes[rootI] = 0
+            count--
         }
     }
 
